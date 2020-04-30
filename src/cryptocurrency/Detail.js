@@ -3,11 +3,13 @@ import '../styles/loading.scss';
 
 import React, { useState, useEffect } from 'react';
 import { getLatestQuotes } from '../services/CoinMakerService'
+import Error from "./Error";
 
 function Detail() {
 
   const [latestQuotes, setLatestQuotes] = useState ({});
   const [isLoading, setIsLoading] = useState (true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
 
@@ -19,6 +21,8 @@ function Detail() {
         const data = Object.entries(response.data)[0][1];
         setLatestQuotes(data);
         setIsLoading(false);
+      }).catch(response => {
+        setError(response);
       });
     }
   }, []);
@@ -27,6 +31,10 @@ function Detail() {
 
   return (
     <div className="wrapper">
+
+      {error.length > 0 &&
+        <Error error={error}/>
+      }
 
       {!isLoading ?
         <>

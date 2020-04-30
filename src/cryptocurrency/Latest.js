@@ -3,6 +3,7 @@ import '../styles/loading.scss';
 
 import React, { useState, useEffect } from 'react';
 import { getLatestCryptocurrencies } from '../services/CoinMakerService'
+import Error from './Error.js'
 
 function Latest() {
 
@@ -11,12 +12,15 @@ function Latest() {
   const [sort, setSort] = useState ("");
   const [sortDirection, setSortDirection] = useState ("");
   const [isLoading, setIsLoading] = useState (true);
+  const [error, setError] = useState("")
 
   useEffect(() => {
     setIsLoading(true)
     getLatestCryptocurrencies(pagination, sort, sortDirection).then(response => {
       setIsLoading(false)
       setLatestCryptocurrencies(response.data);
+    }).catch(response => {
+      setError(response);
     });
   }, [pagination, sort, sortDirection]);
 
@@ -36,6 +40,9 @@ function Latest() {
   return (
     <div className="wrapper">
 
+      {error.length > 0 &&
+        <Error error={error}/>
+      }
       <p className="title_filter">Sort</p>
       <div className="box">
         <select id="SortBy" onChange={(event) => {setPagination(1);setSort(event.target.value)}} value={sort}>

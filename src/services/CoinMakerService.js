@@ -18,9 +18,7 @@ const getLatestCryptocurrencies = (start, sort, sortDirection) => {
     headers: myHeaders
   };
 
-  return fetch(fetchUrl, requestOptions).then(response => response.json()).then(response => {
-    return Promise.resolve(response);
-  });
+  return validateResponse(fetch(fetchUrl, requestOptions).then(response => response.json()))
 }
 
 const getLatestQuotes = (id) => {
@@ -36,7 +34,21 @@ const getLatestQuotes = (id) => {
   };
 
 
-  return fetch(fetchUrl, requestOptions).then(response => response.json())
+  return validateResponse(fetch(fetchUrl, requestOptions).then(response => response.json()))
+}
+
+const validateResponse = (p) => {
+    return p.catch(response => {
+      return Promise.reject("Failed to fetch probably blocked due to CORS policy please check Readme for more information");
+    }).then(response => {
+      const errorCode = response.status.error_code;
+      if (errorCode !== 0) {
+          const error = response.status.error_message;
+          return Promise.reject(error);
+      } else {
+        return Promise.resolve(response);
+      }
+    });
 }
 
 export { getLatestCryptocurrencies, getLatestQuotes } ;
