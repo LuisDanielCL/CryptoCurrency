@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import Detail from './cryptocurrency/Detail';
 import Latest from './cryptocurrency/Latest';
 
