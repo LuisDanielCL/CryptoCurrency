@@ -76,7 +76,7 @@ function Latest() {
 
         {isLoading &&
           <div className="wrapper_loader">
-            <div className="loader"></div>
+            <div className="loader"/>
           </div>
         }
 
